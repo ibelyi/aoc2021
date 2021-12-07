@@ -1,9 +1,9 @@
 mod common;
 use common::{lines_from_file, Step};
 
-mod day06;
-use day06::{solution, test_result};
-const DAY: &str = "day06";
+mod day07;
+use day07::{solution, test_result};
+const DAY: &str = "day07";
 
 fn main() {
     let test_input = String::from("./src/") + DAY + "/test_input.txt";
