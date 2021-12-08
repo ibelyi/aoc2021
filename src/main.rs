@@ -1,9 +1,8 @@
-mod common;
-use common::{lines_from_file, Step};
-
-mod day07;
-use day07::{solution, test_result};
-const DAY: &str = "day07";
+use aoc2021::{
+    common::{lines_from_file, Step},
+    day08::{solution, test_result},
+};
+const DAY: &str = "day08";
 
 fn main() {
     let test_input = String::from("./src/") + DAY + "/test_input.txt";
