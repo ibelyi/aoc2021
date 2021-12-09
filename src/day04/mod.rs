@@ -24,8 +24,6 @@ fn parse(input: &[String]) -> Vec<Vec<i32>> {
 struct Board<'a> {
     orig: &'a Vec<Vec<i32>>,
     curr: Vec<Vec<i32>>,
-    fill_x: Vec<usize>,
-    fill_y: Vec<usize>,
 }
 
 impl<'a> Board<'a> {
@@ -33,22 +31,24 @@ impl<'a> Board<'a> {
         Board {
             orig: board,
             curr: board.clone(),
-            fill_x: vec![board.len(); board[0].len()],
-            fill_y: vec![board[0].len(); board.len()],
         }
     }
     fn count(&self) -> i32 {
-        self.curr.iter().fold(0, |acc, x| acc + x.iter().sum::<i32>())
+        self.curr.iter().flatten().filter(|v| **v >= 0).sum()
     }
 
     fn check(&mut self, n: i32) -> bool {
         for y in 0..self.orig.len() {
             for x in 0..self.orig[0].len() {
                 if self.orig[y][x] == n {
-                    self.fill_x[x] -= 1;
-                    self.fill_y[y] -= 1;
-                    self.curr[y][x] = 0;
-                    return self.fill_x[x] == 0 || self.fill_y[y] == 0;
+                    self.curr[y][x] = -1;
+                    let x_left = (0..self.orig.len())
+                        .filter(|v| self.curr[*v][x] >= 0)
+                        .count();
+                    let y_left = (0..self.orig[0].len())
+                        .filter(|v| self.curr[y][*v] >= 0)
+                        .count();
+                    return x_left == 0 || y_left == 0;
                 }
             }
         }
@@ -57,7 +57,7 @@ impl<'a> Board<'a> {
 }
 
 fn first_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
-    let mut copy:Vec<Board> = boards.iter().map(|x| Board::new(x)).collect();
+    let mut copy: Vec<Board> = boards.iter().map(|x| Board::new(x)).collect();
     for n in numbers {
         for board in &mut copy {
             if board.check(*n) {
@@ -69,7 +69,7 @@ fn first_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
 }
 
 fn last_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
-    let mut copy:Vec<Board> = boards.iter().map(|x| Board::new(x)).collect();
+    let mut copy: Vec<Board> = boards.iter().map(|x| Board::new(x)).collect();
     let mut winner = vec![false; boards.len()];
     let mut winners = 0;
     for n in numbers {

@@ -8,11 +8,7 @@ pub fn test_result(step: &Step) -> String {
 }
 
 fn vote(report: &Vec<u32>, mask: u32) -> i32 {
-    let mut vote = 0;
-    for r in report {
-        vote += if r & mask != 0 { 1 } else { -1 }
-    }
-    vote
+    report.iter().fold(0, |v, r| if r & mask > 0 { v + 1 } else { v - 1})
 }
 
 fn power_consumption(report: &Vec<u32>, size: usize) -> i32 {

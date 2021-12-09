@@ -69,7 +69,7 @@ fn count_basins(floor: &Vec<Vec<usize>>) -> usize {
         }
     }
     basins.sort();
-    basins[basins.len() - 3..].iter().fold(1, |p, v| p * v)
+    basins[basins.len() - 3..].iter().product()
 }
 
 pub fn solution(step: &Step, input: &Vec<String>) -> String {

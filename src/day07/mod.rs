@@ -1,5 +1,4 @@
 use super::common::Step;
-use std::convert::TryFrom;
 
 pub fn test_result(step: &Step) -> String {
     match step {
@@ -8,31 +7,18 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn linear_cost(crabs: &Vec<i32>) -> i32 {
-    let mut crabs = crabs.clone();
-    crabs.sort();
-    let p = crabs[((crabs.len() + 1) / 2)];
-    let mut cost = 0;
-    for c in crabs {
-        cost += (c - p).abs();
-    }
-    cost
-}
-
-fn arithmetic_cost(crabs: &Vec<i32>) -> i32 {
-    let mut prev = i32::MAX;
+fn fuel_cost<F>(crabs: &Vec<i32>, cost: F) -> i32
+where
+    F: Fn(i32) -> i32,
+{
+    let mut min = i32::MAX;
     for p in 0..crabs.len() {
-        let mut cost = 0;
-        for c in crabs {
-            let dist = (c - i32::try_from(p).unwrap()).abs();
-            cost += dist * (dist + 1) / 2;
+        let curr = crabs.iter().map(|v| cost((v - p as i32).abs())).sum();
+        if curr < min {
+            min = curr;
         }
-        if cost > prev {
-            return prev;
-        }
-        prev = cost;
     }
-    prev
+    min
 }
 
 pub fn solution(step: &Step, input: &Vec<String>) -> String {
@@ -41,7 +27,7 @@ pub fn solution(step: &Step, input: &Vec<String>) -> String {
         .map(|n| n.parse().expect("Not a number!"))
         .collect();
     match step {
-        Step::First => linear_cost(&crabs).to_string(),
-        Step::Second => arithmetic_cost(&crabs).to_string(),
+        Step::First => fuel_cost(&crabs, |d| d).to_string(),
+        Step::Second => fuel_cost(&crabs, |d| d * (d + 1) / 2).to_string(),
     }
 }

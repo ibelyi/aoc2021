@@ -22,17 +22,16 @@ fn parse(signal: &str) -> Signal {
     Signal { sig, set }
 }
 
-fn count_1478(signals: &Vec<Vec<Vec<Signal>>>) -> i32 {
-    let mut count = 0;
-    for line in signals {
-        for signal in &line[1] {
+fn count_1478(signals: &Vec<Vec<Vec<Signal>>>) -> usize {
+    signals
+        .iter()
+        .map(|line| line[1].iter())
+        .flatten()
+        .filter(|signal| {
             let len = signal.sig.len();
-            if len < 5 || len == 7 {
-                count += 1
-            }
-        }
-    }
-    count
+            len < 5 || len == 7
+        })
+        .count()
 }
 
 fn count_all(signals: &Vec<Vec<Vec<Signal>>>) -> i32 {

@@ -33,7 +33,7 @@ fn parse(input: &str) -> (Point, Point) {
     )
 }
 
-fn count_overlaps(vents: &Vec<(Point, Point)>, count_diag: bool) -> i32 {
+fn count_overlaps(vents: &Vec<(Point, Point)>, count_diag: bool) -> usize {
     let mut max = Point { x: 0, y: 0 };
     for (p1, p2) in vents {
         for p in [p1, p2] {
@@ -72,15 +72,7 @@ fn count_overlaps(vents: &Vec<(Point, Point)>, count_diag: bool) -> i32 {
         }
         map[p2.y][p2.x] += 1;
     }
-    let mut count = 0;
-    for line in map {
-        for v in line {
-            if v > 1 {
-                count += 1;
-            }
-        }
-    }
-    count
+    map.iter().flatten().filter(|v| **v > 1).count()
 }
 
 pub fn solution(step: &Step, input: &Vec<String>) -> String {
