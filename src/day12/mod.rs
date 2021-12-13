@@ -1,5 +1,5 @@
 use super::common::Step;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 pub fn test_result(step: &Step) -> String {
     match step {
