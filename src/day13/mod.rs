@@ -25,7 +25,7 @@ fn count(dots: &Vec<Vec<usize>>, instr: &[Vec<&str>]) -> usize {
     }
     let max_x = copy.iter().fold(0, |m, d| if m < d.0 { d.0 } else { m }) + 1;
     let max_y = copy.iter().fold(0, |m, d| if m < d.1 { d.1 } else { m }) + 1;
-    let mut sheet = vec![vec!['.'; max_x]; max_y];
+    let mut sheet = vec![vec![' '; max_x]; max_y];
     for dot in copy {
         sheet[dot.1][dot.0] = '#';
     }
