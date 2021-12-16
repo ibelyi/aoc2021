@@ -28,11 +28,10 @@ fn count(data: &Vec<Vec<usize>>) -> usize {
     let y_len = data.len();
     let x_len = data[0].len();
     // Fill up risk assessment for each point with maximum possible value
-    let mut risk: Vec<Vec<usize>> = vec![vec![10 * data.len() * data[0].len(); x_len]; y_len];
-    let mut reduced = true;
+    let mut risk: Vec<Vec<usize>> = vec![vec![10 * x_len * y_len; x_len]; y_len];
     // Repeat while risk assessment could be reduced at least in one point
-    while reduced {
-        reduced = false;
+    loop {
+        let mut reduced = false;
         for y in 0..y_len {
             for x in 0..x_len {
                 // smallest risk to arrive from a neighbour
@@ -47,8 +46,10 @@ fn count(data: &Vec<Vec<usize>>) -> usize {
                 }
             }
         }
+        if !reduced {
+            break risk[y_len - 1][x_len - 1];
+        }
     }
-    risk[y_len - 1][x_len - 1]
 }
 
 fn count_fives(data: &Vec<Vec<usize>>) -> usize {
