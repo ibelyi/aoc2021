@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn count(dots: &Vec<Vec<usize>>, instr: &[Vec<&str>]) -> usize {
+fn count(dots: &[Vec<usize>], instr: &[Vec<&str>]) -> usize {
     let mut copy: Vec<(usize, usize)> = dots.iter().map(|d| (d[0], d[1])).collect();
     for line in instr {
         let fold: usize = line[1].parse().unwrap();
@@ -31,18 +31,18 @@ fn count(dots: &Vec<Vec<usize>>, instr: &[Vec<&str>]) -> usize {
     }
     if instr.len() > 1 {
         for line in &sheet {
-            println!("{}", line.into_iter().collect::<String>());
+            println!("{}", line.iter().collect::<String>());
         }
     }
     sheet.iter().flatten().filter(|v| **v == '#').count()
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
+pub fn solution(step: &Step, input: &[String]) -> String {
     let mut first = true;
     let mut dots = vec![];
     let mut instr = vec![];
     for line in input {
-        if line.len() == 0 {
+        if line.is_empty() {
             first = false;
         } else if first {
             dots.push(line.split(',').map(|v| v.parse().unwrap()).collect());

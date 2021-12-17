@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn n_risk(y: usize, x: usize, risk: &Vec<Vec<usize>>) -> usize {
+fn n_risk(y: usize, x: usize, risk: &[Vec<usize>]) -> usize {
     let mut min = usize::MAX;
     if x > 0 && risk[y][x - 1] < min {
         min = risk[y][x - 1];
@@ -24,7 +24,7 @@ fn n_risk(y: usize, x: usize, risk: &Vec<Vec<usize>>) -> usize {
     min
 }
 
-fn count(data: &Vec<Vec<usize>>) -> usize {
+fn count(data: &[Vec<usize>]) -> usize {
     let y_len = data.len();
     let x_len = data[0].len();
     // Fill up risk assessment for each point with maximum possible value
@@ -52,10 +52,10 @@ fn count(data: &Vec<Vec<usize>>) -> usize {
     }
 }
 
-fn count_fives(data: &Vec<Vec<usize>>) -> usize {
+fn count_fives(data: &[Vec<usize>]) -> usize {
     let y_len = data.len();
     let x_len = data[0].len();
-    let map = (0..y_len * 5)
+    let map: Vec<Vec<usize>> = (0..y_len * 5)
         .map(|y| {
             (0..x_len * 5)
                 .map(|x| (data[y % y_len][x % x_len] + y / y_len + x / x_len - 1) % 9 + 1)
@@ -65,8 +65,8 @@ fn count_fives(data: &Vec<Vec<usize>>) -> usize {
     count(&map)
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let data = input
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let data: Vec<Vec<usize>> = input
         .iter()
         .map(|line| {
             line.chars()

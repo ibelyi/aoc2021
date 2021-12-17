@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn fuel_cost<F>(crabs: &Vec<i32>, cost: F) -> i32
+fn fuel_cost<F>(crabs: &[i32], cost: F) -> i32
 where
     F: Fn(i32) -> i32,
 {
@@ -21,8 +21,8 @@ where
     min
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let crabs = input[0]
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let crabs: Vec<i32> = input[0]
         .split(',')
         .map(|n| n.parse().expect("Not a number!"))
         .collect();

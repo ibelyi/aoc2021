@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn count_fish(fish: &Vec<usize>, days: i32) -> u64 {
+fn count_fish(fish: &[usize], days: i32) -> u64 {
     let mut curr = vec![0; 9];
     for f in fish {
         curr[*f] += 1;
@@ -20,8 +20,8 @@ fn count_fish(fish: &Vec<usize>, days: i32) -> u64 {
     curr.iter().sum()
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let fish = input[0]
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let fish: Vec<usize> = input[0]
         .split(',')
         .map(|n| n.parse().expect("Not a number!"))
         .collect();

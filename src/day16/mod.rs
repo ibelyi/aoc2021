@@ -181,7 +181,7 @@ fn count_result(data: &str) -> u64 {
     }
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
+pub fn solution(step: &Step, input: &[String]) -> String {
     let data = &input[0];
     match step {
         Step::First => count_versions(&data).to_string(),

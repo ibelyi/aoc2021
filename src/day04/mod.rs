@@ -22,15 +22,15 @@ fn parse(input: &[String]) -> Vec<Vec<i32>> {
 }
 
 struct Board<'a> {
-    orig: &'a Vec<Vec<i32>>,
+    orig: &'a [Vec<i32>],
     curr: Vec<Vec<i32>>,
 }
 
 impl<'a> Board<'a> {
-    fn new(board: &Vec<Vec<i32>>) -> Board {
+    fn new(board: &[Vec<i32>]) -> Board {
         Board {
             orig: board,
-            curr: board.clone(),
+            curr: board.to_owned(),
         }
     }
     fn count(&self) -> i32 {
@@ -56,7 +56,7 @@ impl<'a> Board<'a> {
     }
 }
 
-fn first_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
+fn first_win(numbers: &[i32], boards: &[Vec<Vec<i32>>]) -> i32 {
     let mut copy: Vec<Board> = boards.iter().map(|x| Board::new(x)).collect();
     for n in numbers {
         for board in &mut copy {
@@ -68,7 +68,7 @@ fn first_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
     -1
 }
 
-fn last_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
+fn last_win(numbers: &[i32], boards: &[Vec<Vec<i32>>]) -> i32 {
     let mut copy: Vec<Board> = boards.iter().map(|x| Board::new(x)).collect();
     let mut winner = vec![false; boards.len()];
     let mut winners = 0;
@@ -89,8 +89,8 @@ fn last_win(numbers: &Vec<i32>, boards: &Vec<Vec<Vec<i32>>>) -> i32 {
     -1
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let numbers = input[0]
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let numbers: Vec<i32> = input[0]
         .split(',')
         .map(|n| n.parse().expect("Not a number!"))
         .collect();

@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn count(data: &Vec<String>, get_corr: bool) -> i64 {
+fn count(data: &[String], get_corr: bool) -> i64 {
     let mut corr = 0;
     let mut scores = vec![];
     for line in data {
@@ -49,12 +49,12 @@ fn count(data: &Vec<String>, get_corr: bool) -> i64 {
     if get_corr {
         corr
     } else {
-        scores.sort();
+        scores.sort_unstable();
         scores[scores.len() >> 1]
     }
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
+pub fn solution(step: &Step, input: &[String]) -> String {
     match step {
         Step::First => count(&input, true).to_string(),
         Step::Second => count(&input, false).to_string(),

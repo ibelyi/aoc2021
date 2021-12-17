@@ -1,4 +1,5 @@
 use super::common::Step;
+use std::cmp::Ordering;
 
 pub fn test_result(step: &Step) -> String {
     match step {
@@ -16,7 +17,7 @@ fn parse(input: &str) -> (Point, Point) {
     let points: Vec<Vec<usize>> = input
         .split(" -> ")
         .map(|p| {
-            p.split(",")
+            p.split(',')
                 .map(|i| i.parse().expect("Not a number!"))
                 .collect()
         })
@@ -33,7 +34,7 @@ fn parse(input: &str) -> (Point, Point) {
     )
 }
 
-fn count_overlaps(vents: &Vec<(Point, Point)>, count_diag: bool) -> usize {
+fn count_overlaps(vents: &[(Point, Point)], count_diag: bool) -> usize {
     let mut max = Point { x: 0, y: 0 };
     for (p1, p2) in vents {
         for p in [p1, p2] {
@@ -47,19 +48,15 @@ fn count_overlaps(vents: &Vec<(Point, Point)>, count_diag: bool) -> usize {
     }
     let mut map = vec![vec![0; max.x + 1]; max.y + 1];
     for (p1, p2) in vents {
-        let dx: i32 = if p1.x > p2.x {
-            -1
-        } else if p1.x < p2.x {
-            1
-        } else {
-            0
+        let dx = match p1.x.cmp(&p2.x) {
+            Ordering::Greater => -1,
+            Ordering::Less => 1,
+            Ordering::Equal => 0,
         };
-        let dy: i32 = if p1.y > p2.y {
-            -1
-        } else if p1.y < p2.y {
-            1
-        } else {
-            0
+        let dy = match p1.y.cmp(&p2.y) {
+            Ordering::Greater => -1,
+            Ordering::Less => 1,
+            Ordering::Equal => 0,
         };
         if dx != 0 && dy != 0 && !count_diag {
             continue;
@@ -75,8 +72,8 @@ fn count_overlaps(vents: &Vec<(Point, Point)>, count_diag: bool) -> usize {
     map.iter().flatten().filter(|v| **v > 1).count()
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let vents = input.iter().map(|n| parse(n)).collect();
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let vents: Vec<(Point, Point)> = input.iter().map(|n| parse(n)).collect();
     match step {
         Step::First => count_overlaps(&vents, false).to_string(),
         Step::Second => count_overlaps(&vents, true).to_string(),

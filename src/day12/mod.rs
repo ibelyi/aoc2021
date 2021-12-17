@@ -38,17 +38,23 @@ fn visit<'a>(
     sum
 }
 
-fn count(caves: &Vec<Vec<&str>>, twice: bool) -> i32 {
+fn count(caves: &[Vec<&str>], twice: bool) -> i32 {
     let mut cave_map = HashMap::<&str, Vec<&str>>::new();
     for path in caves {
-        cave_map.entry(path[0]).or_insert(vec![]).push(path[1]);
-        cave_map.entry(path[1]).or_insert(vec![]).push(path[0]);
+        cave_map
+            .entry(path[0])
+            .or_insert_with(Vec::new)
+            .push(path[1]);
+        cave_map
+            .entry(path[1])
+            .or_insert_with(Vec::new)
+            .push(path[0]);
     }
     visit("start", &mut vec![], &cave_map, twice)
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let data = input.iter().map(|l| l.split('-').collect()).collect();
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let data: Vec<Vec<&str>> = input.iter().map(|l| l.split('-').collect()).collect();
     match step {
         Step::First => count(&data, false).to_string(),
         Step::Second => count(&data, true).to_string(),

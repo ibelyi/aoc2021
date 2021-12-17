@@ -12,7 +12,7 @@ fn parse(dir: &str) -> (&str, i32) {
     (dir[0], dir[1].parse().expect("Not a number!"))
 }
 
-fn simple_rules(dirs: &Vec<(&str, i32)>) -> i32 {
+fn simple_rules(dirs: &[(&str, i32)]) -> i32 {
     let mut pos = (0, 0);
     for dir in dirs {
         match dir.0 {
@@ -25,7 +25,7 @@ fn simple_rules(dirs: &Vec<(&str, i32)>) -> i32 {
     pos.0 * pos.1
 }
 
-fn advanced_rules(dirs: &Vec<(&str, i32)>) -> i32 {
+fn advanced_rules(dirs: &[(&str, i32)]) -> i32 {
     let mut pos = (0, 0, 0);
     for dir in dirs {
         match dir.0 {
@@ -41,8 +41,8 @@ fn advanced_rules(dirs: &Vec<(&str, i32)>) -> i32 {
     pos.0 * pos.1
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let dirs = input.iter().map(|n| parse(n)).collect();
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let dirs: Vec<(&str, i32)> = input.iter().map(|n| parse(n)).collect();
     match step {
         Step::First => simple_rules(&dirs).to_string(),
         Step::Second => advanced_rules(&dirs).to_string(),

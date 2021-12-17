@@ -8,13 +8,13 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn count(polimer: &str, rules: &Vec<Vec<&str>>, steps: usize) -> i64 {
+fn count(polimer: &str, rules: &[Vec<&str>], steps: usize) -> i64 {
     // Create a HashMap entry out of a rule.
     // Example: CH -> B becomes {"CH": (["CB", "BH"], 'B')}
     let d_rules: HashMap<&str, (Vec<String>, char)> = rules
         .iter()
         .map(|v| {
-            let t = v[1].chars().nth(0).unwrap();
+            let t = v[1].chars().next().unwrap();
             (
                 v[0],
                 (
@@ -37,7 +37,7 @@ fn count(polimer: &str, rules: &Vec<Vec<&str>>, steps: usize) -> i64 {
     let mut pair_counts = HashMap::<String, i64>::new();
     // Keep count of elements in the polimer
     let mut single_counts = HashMap::new();
-    let mut prev = polimer.chars().nth(0).unwrap();
+    let mut prev = polimer.chars().next().unwrap();
     // Make original counts from the polimer
     single_counts.insert(prev, 1);
     for c in polimer.chars().skip(1) {
@@ -71,9 +71,9 @@ fn count(polimer: &str, rules: &Vec<Vec<&str>>, steps: usize) -> i64 {
     *result.last().unwrap() - *result[0]
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
+pub fn solution(step: &Step, input: &[String]) -> String {
     let polimer = &input[0];
-    let rules = input[2..]
+    let rules: Vec<Vec<&str>> = input[2..]
         .iter()
         .map(|v| v.split(" -> ").collect())
         .collect();

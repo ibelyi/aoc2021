@@ -36,7 +36,7 @@ fn flash(y: usize, x: usize, energy: &mut Vec<Vec<usize>>) {
 }
 
 fn one_step(energy: &mut Vec<Vec<usize>>) {
-    for line in energy.into_iter() {
+    for line in energy.iter_mut() {
         for oct in line {
             *oct += 1;
         }
@@ -48,8 +48,8 @@ fn one_step(energy: &mut Vec<Vec<usize>>) {
     }
 }
 
-fn count_flashes(data: &Vec<Vec<usize>>) -> usize {
-    let mut energy = data.clone();
+fn count_flashes(data: &[Vec<usize>]) -> usize {
+    let mut energy = data.to_owned();
     let mut total = 0;
     for _ in 0..100 {
         one_step(&mut energy);
@@ -58,8 +58,8 @@ fn count_flashes(data: &Vec<Vec<usize>>) -> usize {
     total
 }
 
-fn count_first(data: &Vec<Vec<usize>>) -> i32 {
-    let mut energy = data.clone();
+fn count_first(data: &[Vec<usize>]) -> i32 {
+    let mut energy = data.to_owned();
     let total = energy[0].len() * energy.len();
     for step in 0..i32::MAX {
         one_step(&mut energy);
@@ -70,8 +70,8 @@ fn count_first(data: &Vec<Vec<usize>>) -> i32 {
     0
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let data = input
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let data: Vec<Vec<usize>> = input
         .iter()
         .map(|l| l.chars().map(|c| c.to_string().parse().unwrap()).collect())
         .collect();

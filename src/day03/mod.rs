@@ -7,11 +7,13 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn vote(report: &Vec<u32>, mask: u32) -> i32 {
-    report.iter().fold(0, |v, r| if r & mask > 0 { v + 1 } else { v - 1})
+fn vote(report: &[u32], mask: u32) -> i32 {
+    report
+        .iter()
+        .fold(0, |v, r| if r & mask > 0 { v + 1 } else { v - 1 })
 }
 
-fn power_consumption(report: &Vec<u32>, size: usize) -> i32 {
+fn power_consumption(report: &[u32], size: usize) -> i32 {
     let mut gamma = 0;
     let mut epsilon = 0;
     let mut mask = 1 << (size - 1);
@@ -28,9 +30,9 @@ fn power_consumption(report: &Vec<u32>, size: usize) -> i32 {
     gamma * epsilon
 }
 
-fn life_support(report: &Vec<u32>, size: usize) -> u32 {
-    let mut oxy = report.clone();
-    let mut co2 = report.clone();
+fn life_support(report: &[u32], size: usize) -> u32 {
+    let mut oxy = report.to_owned();
+    let mut co2 = report.to_owned();
     let mut mask = 1 << (size - 1);
     while mask > 0 {
         if oxy.len() > 1 {
@@ -46,9 +48,9 @@ fn life_support(report: &Vec<u32>, size: usize) -> u32 {
     oxy[0] * co2[0]
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
+pub fn solution(step: &Step, input: &[String]) -> String {
     let size = input[0].len();
-    let report = input
+    let report: Vec<u32> = input
         .iter()
         .map(|n| u32::from_str_radix(n, 2).expect("Not a binary number"))
         .collect();

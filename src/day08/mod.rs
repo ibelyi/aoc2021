@@ -16,13 +16,13 @@ struct Signal {
 
 fn parse(signal: &str) -> Signal {
     let mut chars: Vec<char> = signal.chars().collect();
-    chars.sort();
+    chars.sort_unstable();
     let set = signal.chars().collect();
     let sig = chars.iter().collect();
     Signal { sig, set }
 }
 
-fn count_1478(signals: &Vec<Vec<Vec<Signal>>>) -> usize {
+fn count_1478(signals: &[Vec<Vec<Signal>>]) -> usize {
     signals
         .iter()
         .map(|line| line[1].iter())
@@ -34,7 +34,7 @@ fn count_1478(signals: &Vec<Vec<Vec<Signal>>>) -> usize {
         .count()
 }
 
-fn count_all(signals: &Vec<Vec<Vec<Signal>>>) -> i32 {
+fn count_all(signals: &[Vec<Vec<Signal>>]) -> i32 {
     let mut count = 0;
     for line in signals {
         let mut map = HashMap::<i32, &Signal>::new();
@@ -93,8 +93,8 @@ fn count_all(signals: &Vec<Vec<Vec<Signal>>>) -> i32 {
     count
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let signals = input
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let signals: Vec<Vec<Vec<Signal>>> = input
         .iter()
         .map(|n| {
             n.split(" | ")

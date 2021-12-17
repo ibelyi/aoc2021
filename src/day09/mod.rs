@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn count_low(floor: &Vec<Vec<usize>>) -> usize {
+fn count_low(floor: &[Vec<usize>]) -> usize {
     let x_len = floor[0].len();
     let y_len = floor.len();
     let mut count = 0;
@@ -55,7 +55,7 @@ fn count(y: usize, x: usize, copy: &mut Vec<Vec<i32>>) -> usize {
     sum
 }
 
-fn count_basins(floor: &Vec<Vec<usize>>) -> usize {
+fn count_basins(floor: &[Vec<usize>]) -> usize {
     let mut copy: Vec<Vec<i32>> = floor
         .iter()
         .map(|l| l.iter().map(|v| *v as i32).collect())
@@ -68,12 +68,12 @@ fn count_basins(floor: &Vec<Vec<usize>>) -> usize {
             }
         }
     }
-    basins.sort();
+    basins.sort_unstable();
     basins[basins.len() - 3..].iter().product()
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let floor = input
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let floor: Vec<Vec<usize>> = input
         .iter()
         .map(|l| {
             l.chars()

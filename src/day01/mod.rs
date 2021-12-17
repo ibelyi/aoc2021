@@ -7,7 +7,7 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
-fn count_drops(floor: &Vec<i32>, range: usize) -> u32 {
+fn count_drops(floor: &[i32], range: usize) -> u32 {
     let mut count = 0;
     let mut prev = std::i32::MAX;
     for index in 0..floor.len() - range + 1 {
@@ -20,8 +20,8 @@ fn count_drops(floor: &Vec<i32>, range: usize) -> u32 {
     count
 }
 
-pub fn solution(step: &Step, input: &Vec<String>) -> String {
-    let floor = input
+pub fn solution(step: &Step, input: &[String]) -> String {
+    let floor: Vec<i32> = input
         .iter()
         .map(|n| n.parse().expect("Not a number"))
         .collect();
