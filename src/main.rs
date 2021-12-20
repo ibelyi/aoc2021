@@ -1,8 +1,8 @@
 use aoc2021::{
     common::{lines_from_file, Step},
-    day17::{solution, test_result},
+    day20::{solution, test_result},
 };
-const DAY: &str = "day17";
+const DAY: &str = "day20";
 
 fn main() {
     let test_input = String::from("./src/") + DAY + "/test_input.txt";
