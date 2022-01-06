@@ -73,7 +73,11 @@ fn count_first(data: &[Vec<usize>]) -> i32 {
 pub fn solution(step: &Step, input: &[String]) -> String {
     let data: Vec<Vec<usize>> = input
         .iter()
-        .map(|l| l.chars().map(|c| c.to_string().parse().unwrap()).collect())
+        .map(|l| {
+            l.chars()
+                .map(|c| c.to_digit(10).expect("Not a digit!") as usize)
+                .collect()
+        })
         .collect();
     match step {
         Step::First => count_flashes(&data).to_string(),

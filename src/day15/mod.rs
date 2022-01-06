@@ -70,7 +70,7 @@ pub fn solution(step: &Step, input: &[String]) -> String {
         .iter()
         .map(|line| {
             line.chars()
-                .map(|c| c.to_string().parse().unwrap())
+                .map(|c| c.to_digit(10).expect("Not a digit!") as usize)
                 .collect()
         })
         .collect();
