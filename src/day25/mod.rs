@@ -7,94 +7,80 @@ pub fn test_result(step: &Step) -> String {
     }
 }
 
+#[derive(Clone, Copy, PartialEq)]
+enum Cell {
+    Empty,
+    East,
+    South,
+}
+
+impl Cell {
+    fn parse(cell: char) -> Cell {
+        match cell {
+            '.' => Cell::Empty,
+            '>' => Cell::East,
+            'v' => Cell::South,
+            _ => panic!("Invalid cell value!"),
+        }
+    }
+}
+
 struct Field {
     ylen: usize,
     xlen: usize,
 }
 
 impl Field {
-    fn new(data: &[Vec<usize>]) -> Field {
+    fn new(data: &[Vec<Cell>]) -> Field {
         Field {
             ylen: data.len(),
             xlen: data[0].len(),
         }
     }
-    fn next(&self, dir: usize, y: usize, x: usize) -> (usize, usize) {
-        if dir == 1 {
-            (y, (x + 1) % self.xlen)
-        } else {
-            ((y + 1) % self.ylen, x)
+    fn next(&self, dir: Cell, y: usize, x: usize) -> (usize, usize) {
+        match dir {
+            Cell::East => (y, (x + 1) % self.xlen),
+            Cell::South => ((y + 1) % self.ylen, x),
+            Cell::Empty => panic!("Invalid cell for 'next'"),
         }
     }
 
-    fn iter(&self) -> FieldIter {
-        FieldIter {
-            field: &self,
-            y: 0,
-            x: 0,
-        }
+    fn iter(&self) -> impl Iterator<Item = (usize, usize)> + '_ {
+        (0..self.ylen)
+            .into_iter()
+            .map(move |y| (0..self.xlen).into_iter().map(move |x| (y, x)))
+            .flatten()
     }
 }
 
-struct FieldIter<'a> {
-    field: &'a Field,
-    y: usize,
-    x: usize,
-}
-
-impl<'a> Iterator for FieldIter<'a> {
-    type Item = (usize, usize);
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.y == self.field.ylen {
-            return None;
-        }
-        let result = (self.y, self.x);
-        if self.x < self.field.xlen - 1 {
-            self.x += 1;
-        } else {
-            self.x = 0;
-            self.y += 1;
-        }
-        Some(result)
-    }
-}
-
-fn count(data: &[Vec<usize>]) -> i32 {
-    let mut count = 0;
+fn count(data: &[Vec<Cell>]) -> i32 {
     let mut cucumbers = data.to_owned();
     let field = Field::new(&data);
-    loop {
+    for count in 1.. {
         let mut moved = false;
-        for dir in [1, 2] {
+        for dir in [Cell::East, Cell::South] {
             let mut newc = cucumbers.to_owned();
-            for (y, x) in field.iter() {
+            for (y, x) in field.iter().filter(|(y, x)| cucumbers[*y][*x] == dir) {
                 let (y1, x1) = field.next(dir, y, x);
-                if cucumbers[y][x] == dir && cucumbers[y1][x1] == 0 {
+                if cucumbers[y1][x1] == Cell::Empty {
                     moved = true;
-                    newc[y][x] = 0;
+                    newc[y][x] = Cell::Empty;
                     newc[y1][x1] = dir;
                 }
             }
             cucumbers = newc;
         }
-        count += 1;
         if !moved {
             return count;
         }
     }
+    i32::MAX
 }
 
-const DISP: [char; 3] = ['.', '>', 'v'];
-
 pub fn solution(step: &Step, input: &[String]) -> String {
-    let data: Vec<Vec<usize>> = input
+    let data: Vec<Vec<Cell>> = input
         .iter()
-        .map(|l| {
-            l.chars()
-                .filter_map(|c| DISP.iter().position(|&r| r == c))
-                .collect()
-        })
+        .map(|l| l.chars().map(Cell::parse).collect())
         .collect();
     match step {
         Step::First => count(&data).to_string(),
